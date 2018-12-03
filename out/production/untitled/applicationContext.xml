@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean name="source" class="demo.Source">
+        <property name="fruit" value="橙子"/>
+        <property name="sugar" value="多糖"/>
+        <property name="size" value="超大杯"/>
+    </bean>
+    <bean name="JuiceMaker" class="demo.JuiceMaker">
+        <property name="source" ref="source"/>
+    </bean>
+
+
+    <bean id="test2" class="aspect.LoggerAspect"/>
+
+    <aop:config>
+        <aop:pointcut id="log_pointcut" expression="execution(* demo.JuiceMaker.*(..)) "/>
+        <aop:aspect id="log_aspect" ref="test2">
+            <aop:around pointcut-ref="log_pointcut" method="log"/>
+        </aop:aspect>
+    </aop:config>
+
+    <aop:config>
+        <aop:pointcut id="log_pointcut2" expression="execution(* demo.Source.*(..))"/>
+        <aop:aspect id="log_aspect2" ref="test2">
+            <aop:around pointcut-ref="log_pointcut2" method="log2"/>
+        </aop:aspect>
+
+    </aop:config>
+
+</beans>
